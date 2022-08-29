@@ -67,9 +67,9 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
                   });
                 },
                 children: const [
-                ProductPageView(image: 'Jacket'),
-                ProductPageView(image: 'Jacket'),
-                ProductPageView(image: 'Jacket'),
+                  ProductPageView(image: 'Jacket'),
+                  ProductPageView(image: 'Jacket'),
+                  ProductPageView(image: 'Jacket'),
                 ],
               ),
             ),

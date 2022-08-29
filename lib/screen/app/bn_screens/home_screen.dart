@@ -23,8 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     _searchTextController = TextEditingController();
-    _pageController = PageController(viewportFraction: 0.8, initialPage: 1);
-    _pageController1 = PageController(viewportFraction: 0.8, initialPage: 1);
+    _pageController = PageController(viewportFraction: 0.8, initialPage: 0);
+    _pageController1 = PageController(viewportFraction: 0.8, initialPage: 0);
   }
 
   @override
@@ -93,27 +93,31 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: 100.h,
+              maxHeight: 150.h,
             ),
             child: GridView.builder(
               itemCount: 10,
               scrollDirection: Axis.horizontal,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 1),
+              gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 1,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 110.h/141.w,
+                   ),
               itemBuilder: (context, index) {
                 return Container(
-
                   margin: EdgeInsetsDirectional.only(end: 5),
                   child: Column(
                     children: [
                       Image(
                         image: AssetImage('images/category1.png'),
+                        width: double.infinity,
+                        fit: BoxFit.cover,
                       ),
                       SizedBox(height: 10.h,),
                       Text(
                         'Furniture',
                         style:
-                        GoogleFonts.nunitoSans(fontWeight: FontWeight.bold),
+                        GoogleFonts.nunitoSans(fontWeight: FontWeight.bold,fontSize: 16,color: Color(0XFFFF7750)),
                       )
                     ],
                   ),

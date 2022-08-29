@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:smart_store/screen/app/address_screen.dart';
+import 'package:smart_store/screen/app/addresses/address_screen.dart';
+import 'package:smart_store/screen/app/bn_screens/cart_screens/cart_screen.dart';
 import 'package:smart_store/screen/app/bottom_nav_screen.dart';
 import 'package:smart_store/screen/app/categories_screen.dart';
-import 'package:smart_store/screen/app/favorite_screen.dart';
-import 'package:smart_store/screen/app/home_screen.dart';
+import 'package:smart_store/screen/app/bn_screens/favorite_screen.dart';
+import 'package:smart_store/screen/app/bn_screens/home_screen.dart';
+import 'package:smart_store/screen/app/drawer_screens/order_detils_screen.dart';
+import 'package:smart_store/screen/app/drawer_screens/order_screen.dart';
+import 'package:smart_store/screen/app/payment_cards_screen.dart';
 import 'package:smart_store/screen/app/product_screen.dart';
-import 'package:smart_store/screen/app/profile_screen.dart';
-import 'package:smart_store/screen/app/setting_screen.dart';
+import 'package:smart_store/screen/app/bn_screens/profile_screen.dart';
+import 'package:smart_store/screen/app/bn_screens/setting_screen.dart';
 import 'package:smart_store/screen/app/subcategory_screen.dart';
-import 'package:smart_store/screen/app/updated_address_screen.dart';
+import 'package:smart_store/screen/app/addresses/updated_address_screen.dart';
 import 'package:smart_store/screen/auth/fotget_password_screen.dart';
 import 'package:smart_store/screen/auth/login_screen.dart';
 import 'package:smart_store/screen/auth/signup_screen.dart';
@@ -85,6 +89,10 @@ class MyApp extends StatelessWidget {
               '/bottom_nav_screen' : (context) => const BottomNavigationScreen(),
               '/address_screen' : (context) => const AddressScreen(),
               '/updated_address_screen' : (context) => const UpdatedAddressScreen(),
+              '/payment_cards_screen' : (context) => const PaymentCardsScreen(),
+              '/cart_screen' : (context) => const CartScreen(),
+              '/orders_screen' : (context) => const OrdersScreen(),
+              '/orders_details_screen' : (context) => const OrderDetailsScreen(),
 
             },
           );

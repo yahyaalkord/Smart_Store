@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_store/utils/helpers.dart';
 import 'package:smart_store/widget/app_elevated_botton.dart';
 import 'package:smart_store/widget/app_text_field.dart';
+import 'package:smart_store/widget/verify_code.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({Key? key}) : super(key: key);
@@ -206,257 +207,13 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> with Helper
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                SizedBox(
-                                  width: 50.w,
-                                  child: TextField(
-                                    textAlign: TextAlign.center,
-                                    controller: _verify1TextController,
-                                    maxLength: 1,
-                                    keyboardType: const TextInputType
-                                        .numberWithOptions(
-                                        decimal: false, signed: false),
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: const Color(0XFFF9F3EE),
-                                      helperMaxLines: 1,
-                                      hintStyle: GoogleFonts.nunitoSans(
-                                          fontSize: 16.sp),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      disabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                    ),
-
-                                  ),
-
-                                ),
+                                VerifyCode(verify1TextController: _verify1TextController),
                                 const Spacer(),
-                                SizedBox(
-                                  width: 50.w,
-                                  child: TextField(
-                                    textAlign: TextAlign.center,
-                                    controller: _verify2TextController,
-                                    maxLength: 1,
-                                    keyboardType: const TextInputType
-                                        .numberWithOptions(
-                                        decimal: false, signed: false),
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: const Color(0XFFF9F3EE),
-                                      helperMaxLines: 1,
-                                      hintStyle: GoogleFonts.nunitoSans(
-                                          fontSize: 16.sp),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      disabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                    ),
-
-                                  ),
-
-                                ),
+                                VerifyCode(verify1TextController: _verify2TextController),
                                 const Spacer(),
-                                SizedBox(
-                                  width: 50.w,
-                                  child: TextField(
-                                    textAlign: TextAlign.center,
-                                    controller: _verify3TextController,
-                                    maxLength: 1,
-                                    keyboardType: const TextInputType
-                                        .numberWithOptions(
-                                        decimal: false, signed: false),
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: const Color(0XFFF9F3EE),
-                                      helperMaxLines: 1,
-                                      hintStyle: GoogleFonts.nunitoSans(
-                                          fontSize: 16.sp),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      disabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                    ),
-
-                                  ),
-                                ),
+                               VerifyCode(verify1TextController: _verify3TextController),
                                 const Spacer(),
-                                SizedBox(
-                                  width: 50.w,
-                                  child: TextField(
-                                    textAlign: TextAlign.center,
-                                    controller: _verify4TextController,
-                                    maxLength: 1,
-                                    keyboardType: const TextInputType
-                                        .numberWithOptions(
-                                        decimal: false, signed: false),
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: const Color(0XFFF9F3EE),
-
-                                      helperMaxLines: 1,
-                                      hintStyle: GoogleFonts.nunitoSans(
-                                          fontSize: 16.sp),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      disabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.r),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          )
-                                      ),
-                                    ),
-
-                                  ),
-
-                                ),
+                                VerifyCode(verify1TextController: _verify4TextController),
 
                               ],
                             ),
@@ -489,7 +246,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> with Helper
         _verify4TextController.text.isNotEmpty){
       return true;
     }
-    showSnackBar(context, message:  'Enter your veriy code',erorr: true);
+    // showSnackBar(context, message:  'Enter your veriy code',erorr: true);
 
     return false;
 
@@ -501,3 +258,5 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> with Helper
   }
 
 }
+
+

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_store/model/bn_screen.dart';
-import 'package:smart_store/screen/app/favorite_screen.dart';
-import 'package:smart_store/screen/app/home_screen.dart';
-import 'package:smart_store/screen/app/profile_screen.dart';
-import 'package:smart_store/screen/app/setting_screen.dart';
+import 'package:smart_store/screen/app/bn_screens/cart_screens/cart_screen.dart';
+import 'package:smart_store/screen/app/bn_screens/favorite_screen.dart';
+import 'package:smart_store/screen/app/bn_screens/home_screen.dart';
+import 'package:smart_store/screen/app/bn_screens/profile_screen.dart';
+import 'package:smart_store/screen/app/bn_screens/setting_screen.dart';
 
 
 class BottomNavigationScreen extends StatefulWidget {
@@ -21,7 +22,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   final List<BnScreen> _screens = <BnScreen>[
     const BnScreen(title: 'Home', widget: HomeScreen()),
     const BnScreen(title: 'favorite', widget: FavoriteScreen()),
-    const BnScreen(title: 'Profile', widget: ProfileScreen()),
+    const BnScreen(title: 'Cart', widget: CartScreen()),
     const BnScreen(title: 'Settings', widget: SettingsScreen()),
   ];
 
@@ -36,7 +37,13 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                color: Color(0XFFFF7750),
+                borderRadius: BorderRadius.circular(10.r),
+
+              ),
               currentAccountPicture: const CircleAvatar(
+                backgroundImage: AssetImage('images/avatar.png'),
                 radius: 40,
               ),
               accountName: Text(
@@ -47,26 +54,21 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
                 'Flutter@email.com',
                 style: GoogleFonts.montserrat(),
               ),
-              otherAccountsPictures: const [
-                CircleAvatar(),
-                CircleAvatar(),
-                CircleAvatar(),
-
-              ],
+             
             ),
 
             ListTile(
               onTap: () {
                 Navigator.pop(context);
                 Future.delayed(const Duration(milliseconds: 500), () {
-                  // Navigator.pushNamed(context, '/faqs_screen');
-                  // Navigator.pushNamed(context, '/frequent_question_screen');
+                  Navigator.pushNamed(context, '/orders_screen');
+
                 });
 
               },
               leading: const Icon(Icons.question_answer),
-              title: Text('FAQs',style: GoogleFonts.montserrat(),),
-              subtitle: Text('Frequent Question ',style: GoogleFonts.montserrat(),),
+              title: Text('ORDERS',style: GoogleFonts.nunitoSans(fontWeight: FontWeight.bold),),
+              subtitle: Text('My Order Status ',style: GoogleFonts.nunitoSans(),),
               trailing: const Icon(Icons.arrow_forward_ios,size: 18,),
             ),
             ListTile(
@@ -78,8 +80,8 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
 
               },
               leading: const Icon(Icons.question_answer),
-              title: Text('Favorites',style: GoogleFonts.montserrat(),),
-              subtitle: Text('Favorites Screen ',style: GoogleFonts.montserrat(),),
+              title: Text('NOTIFICATIONS',style:GoogleFonts.nunitoSans(fontWeight: FontWeight.bold),),
+              subtitle: Text('Show notifications received ',style: GoogleFonts.nunitoSans(),),
               trailing: const Icon(Icons.arrow_forward_ios,size: 18,),
             ),
           ],
@@ -129,11 +131,11 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
               label: 'favorite',
             ),
              BottomNavigationBarItem(
-              activeIcon: Icon(Icons.person),
+              activeIcon: Icon(Icons.shopping_cart_rounded),
               icon:  Icon(
-                Icons.person,
+                Icons.shopping_cart_outlined,
               ),
-              label: 'profile',
+              label: 'cart',
             ),
             BottomNavigationBarItem(
               activeIcon:  Icon(Icons.settings),
