@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_store/model/payment_catds_controller.dart';
+import 'package:smart_store/utils/helpers.dart';
 import 'package:smart_store/widget/card_info.dart';
 
 class PaymentCardsScreen extends StatefulWidget {
@@ -11,7 +12,7 @@ class PaymentCardsScreen extends StatefulWidget {
   State<PaymentCardsScreen> createState() => _PaymentCardsScreenState();
 }
 
-class _PaymentCardsScreenState extends State<PaymentCardsScreen> {
+class _PaymentCardsScreenState extends State<PaymentCardsScreen> with Helpers{
   final List<PaymentCards> _payment = <PaymentCards>[
     PaymentCards(name: 'Credit Card', type: 'VISA', holderName: 'YourBank', cardNumber: '1234 - 1234 - 1234', expirationDate: '15/9/2024', securityCode: 4565),
     PaymentCards(name: 'Credit Card', type: 'MASTER', holderName: 'Nordeo', cardNumber: '1234 - 1234 - 1234', expirationDate: '20/3/2023', securityCode: 1234),
@@ -119,7 +120,7 @@ class _PaymentCardsScreenState extends State<PaymentCardsScreen> {
             backgroundColor: Color(0XFFFF7750),
             child: Icon(Icons.add),
             onPressed: (){
-
+              Navigator.pushNamed(context, '/add_payment_screen');
             }),
       ),
     );
@@ -138,7 +139,11 @@ class _PaymentCardsScreenState extends State<PaymentCardsScreen> {
                   const Spacer(),
                   TextButton(
                     onPressed: () {
-
+                     setState((){
+                       _payment.removeAt(0);
+                     });
+                      Navigator.pop(context);
+                      showSnackBar(context, message: 'Deleted Successfully',erorr: false);
                     },
                     child: const Text(
                       'Deleted',
@@ -147,7 +152,8 @@ class _PaymentCardsScreenState extends State<PaymentCardsScreen> {
                   const Spacer(),
                   TextButton(
                     onPressed: () {
-
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/add_payment_screen');
                     },
                     child: const Text(
                       'Updated'

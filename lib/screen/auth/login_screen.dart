@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> with Helpers{
       appBar: AppBar(
         title: const Text('LOGIN'),
         actions: [
-          PopupMenuButton<String>(onSelected: (String value) {
+          PopupMenuButton<String>(icon: Icon(Icons.language),onSelected: (String value) {
             if (_box != value) {
               setState(() {
                 _box = value;

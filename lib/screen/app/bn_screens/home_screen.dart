@@ -129,96 +129,105 @@ class _HomeScreenState extends State<HomeScreen> {
         SizedBox(
           height: 20.h,
         ),
-        HomeSection(titel: 'Latest Products', onPressed: () {}),
+        HomeSection(titel: 'Latest Products', onPressed: () {
+          Navigator.pushNamed(context,'/products_screen');
+        }),
         SizedBox(
           height: 20.h,
         ),
-        GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 10,
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 30,
-            crossAxisSpacing: 15,
-          ),
-          itemBuilder: (context, index) {
-            return SizedBox(
-              height: 350.h,
-              child: Container(
+        GestureDetector(
+          onTap: (){
+            Navigator.pushNamed(context, '/product_screen');
+          },
+          child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: 10,
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 30,
+              crossAxisSpacing: 15,
+            ),
+            itemBuilder: (context, index) {
+              return SizedBox(
                 height: 350.h,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Stack(
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            child: Container(
-                              height: double.infinity,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.r),
-                                  color: const Color(0XFFDEDEE0)),
-                              child: const Image(
-                                image: AssetImage('images/shoes.png'),
+                child: Container(
+                  height: 350.h,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 5,
+                        child: Stack(
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
+                              child: Container(
+                                height: double.infinity,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20.r),
+                                    color: const Color(0XFFDEDEE0)),
+                                child: const Image(
+                                  image: AssetImage('images/shoes.png'),
+                                ),
                               ),
                             ),
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                setState((){
-                                  _favorite = !_favorite;
-                                });
-                              },
-                              icon: Icon(
-                                _favorite ? Icons.favorite : Icons.favorite_border,
-                                color: Color(0XFFFF7750),
-                              )
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Text(
-                        'Nike Jordan 1 Retro'
-                            'Yellow',
-                        style: GoogleFonts.nunitoSans(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
+                            IconButton(
+                                onPressed: () {
+                                  setState((){
+                                    _favorite = !_favorite;
+                                  });
+                                },
+                                icon: Icon(
+                                  _favorite ? Icons.favorite : Icons.favorite_border,
+                                  color: Color(0XFFFF7750),
+                                )
+                            ),
+                          ],
                         ),
-                        textAlign: TextAlign.center,
                       ),
-                    ),
-                    Expanded(
+                      Expanded(
+                        flex: 2,
                         child: Text(
-                          '\$28',
+                          'Nike Jordan 1 Retro'
+                              'Yellow',
                           style: GoogleFonts.nunitoSans(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0XFFFF7750)),
-                          textAlign: TextAlign.start,
-                        )),
-                  ],
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Expanded(
+                          child: Text(
+                            '\$28',
+                            style: GoogleFonts.nunitoSans(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0XFFFF7750)),
+                            textAlign: TextAlign.start,
+                          )),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
         SizedBox(
           height: 20.h,
         ),
-        HomeSection(titel: 'Products you may like', onPressed: () {}),
+        HomeSection(titel: 'Products you may like', onPressed: () {
+          Navigator.pushNamed(context, '/like_product_screen');
+        }),
         SizedBox(
           height: 10.h,
         ),
         GestureDetector(
           onTap: (){
-            Navigator.pushNamed(context, '/subcategory_screen');
+            Navigator.pushNamed(context, '/product_screen');
           },
           child: ListView.builder(
             physics: const NeverScrollableScrollPhysics(),

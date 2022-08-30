@@ -15,7 +15,8 @@ class ProductScreen extends StatefulWidget {
   State<ProductScreen> createState() => _ProductScreenState();
 }
 
-class _ProductScreenState extends State<ProductScreen> with SingleTickerProviderStateMixin,Helpers{
+class _ProductScreenState extends State<ProductScreen>
+    with SingleTickerProviderStateMixin, Helpers {
   late PageController _pageController;
   late TabController _tabController;
   int _currentPage = 0;
@@ -40,14 +41,18 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Product'),
-      actions: [
-        Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 15.w),
-          child: const Icon(Icons.card_travel),
-        ),
-
-      ],
+      appBar: AppBar(
+        title: const Text('Product'),
+        actions: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15.w),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/cart_screen');
+                },
+                icon: Icon(Icons.card_travel)),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -73,8 +78,9 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
                 ],
               ),
             ),
-            SizedBox(height: 10.h,),
-
+            SizedBox(
+              height: 10.h,
+            ),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               PageViewIndicator(
                 isCurrentPage: _currentPage == 0,
@@ -88,34 +94,51 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
                 isCurrentPage: _currentPage == 2,
               ),
             ]),
-             SizedBox(
+            SizedBox(
               height: 10.h,
             ),
             Padding(
-              padding:  EdgeInsets.symmetric(horizontal: 25.h),
+              padding: EdgeInsets.symmetric(horizontal: 25.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Jacket Pullover Sweat Hoodie',style: GoogleFonts.nunitoSans(fontWeight: FontWeight.bold,fontSize: 16),),
+                  Text(
+                    'Jacket Pullover Sweat Hoodie',
+                    style: GoogleFonts.nunitoSans(
+                        fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
                   Row(
                     children: [
-                      Text('\$40',style: GoogleFonts.nunitoSans(fontWeight: FontWeight.bold,fontSize: 16,color: Color(0XFFFF7750)),),
+                      Text(
+                        '\$40',
+                        style: GoogleFonts.nunitoSans(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Color(0XFFFF7750)),
+                      ),
                       const Spacer(),
                       IconButton(
                           onPressed: () {
-                            setState((){
+                            setState(() {
                               _favorite = !_favorite;
                             });
                           },
                           icon: Icon(
                             _favorite ? Icons.favorite : Icons.favorite_border,
                             color: const Color(0XFFFF7750),
-                          )
-                      ),
+                          )),
                     ],
                   ),
-                  SizedBox(height: 20.h,),
-                  Text('Siz',style: GoogleFonts.nunitoSans(fontWeight: FontWeight.normal,fontSize: 14,color: Colors.black45),),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  Text(
+                    'Siz',
+                    style: GoogleFonts.nunitoSans(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14,
+                        color: Colors.black45),
+                  ),
                   ConstrainedBox(
                     constraints: BoxConstraints(maxHeight: 50.h),
                     child: TabBar(
@@ -124,13 +147,12 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
                           color: const Color(0XFFFF7750),
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: const [
-                             BoxShadow(
+                            BoxShadow(
                               color: Colors.black45,
                               blurRadius: 5,
                               offset: Offset(0, 3),
                             )
-                          ]
-                      ),
+                          ]),
                       controller: _tabController,
                       labelColor: Colors.black,
                       onTap: (int tabIndex) {
@@ -154,23 +176,24 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
                         Tab(
                           text: 'XXL',
                         ),
-
                       ],
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 50.h,),
+            SizedBox(
+              height: 50.h,
+            ),
             Padding(
-              padding:  EdgeInsets.symmetric(horizontal: 25.w),
+              padding: EdgeInsets.symmetric(horizontal: 25.w),
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.r),
                   boxShadow: const [
                     BoxShadow(
                       color: Colors.black38,
-                      offset:  Offset(0, 3),
+                      offset: Offset(0, 3),
                       blurRadius: 6,
                     ),
                   ],
@@ -178,20 +201,21 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
                 ),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    minimumSize:  Size(double.infinity, 63.h),
+                    minimumSize: Size(double.infinity, 63.h),
                     primary: Colors.transparent,
                     shadowColor: Colors.transparent,
                   ),
                   onPressed: () {
                     _showConfirmyBottomSheet();
                   },
-                  child:  Text(
-                    'Add To Cart',style: GoogleFonts.nunitoSans(fontWeight: FontWeight.bold),
+                  child: Text(
+                    'Add To Cart',
+                    style: GoogleFonts.nunitoSans(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
             ),
-             SizedBox(
+            SizedBox(
               height: 25.h,
             )
           ],
@@ -199,7 +223,8 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
       ),
     );
   }
-  void _showConfirmyBottomSheet()  {
+
+  void _showConfirmyBottomSheet() {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -215,31 +240,52 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
                 return StatefulBuilder(
                   builder: (context, setState) {
                     return Padding(
-                      padding:  EdgeInsets.symmetric(horizontal: 25.h),
+                      padding: EdgeInsets.symmetric(horizontal: 25.h),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 15.h,),
-                          Text('Jacket Pullover Sweat Hoodie',style: GoogleFonts.nunitoSans(fontWeight: FontWeight.bold,fontSize: 16),),
+                          SizedBox(
+                            height: 15.h,
+                          ),
+                          Text(
+                            'Jacket Pullover Sweat Hoodie',
+                            style: GoogleFonts.nunitoSans(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
                           Row(
                             children: [
-                              Text('\$40',style: GoogleFonts.nunitoSans(fontWeight: FontWeight.bold,fontSize: 16,color: Color(0XFFFF7750)),),
+                              Text(
+                                '\$40',
+                                style: GoogleFonts.nunitoSans(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Color(0XFFFF7750)),
+                              ),
                               const Spacer(),
                               IconButton(
                                   onPressed: () {
-                                    setState((){
+                                    setState(() {
                                       _favorite = !_favorite;
                                     });
                                   },
                                   icon: Icon(
-                                    _favorite ? Icons.favorite : Icons.favorite_border,
+                                    _favorite
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
                                     color: const Color(0XFFFF7750),
-                                  )
-                              ),
+                                  )),
                             ],
                           ),
-                          SizedBox(height: 20.h,),
-                          Text('Siz',style: GoogleFonts.nunitoSans(fontWeight: FontWeight.normal,fontSize: 14,color: Colors.black45),),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Text(
+                            'Siz',
+                            style: GoogleFonts.nunitoSans(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 14,
+                                color: Colors.black45),
+                          ),
                           ConstrainedBox(
                             constraints: BoxConstraints(maxHeight: 50.h),
                             child: TabBar(
@@ -253,8 +299,7 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
                                       blurRadius: 5,
                                       offset: Offset(0, 3),
                                     )
-                                  ]
-                              ),
+                                  ]),
                               controller: _tabController,
                               labelColor: Colors.black,
                               onTap: (int tabIndex) {
@@ -278,39 +323,72 @@ class _ProductScreenState extends State<ProductScreen> with SingleTickerProvider
                                 Tab(
                                   text: 'XXL',
                                 ),
-
                               ],
                             ),
                           ),
-                          SizedBox(height: 20.h,),
-                          Text('Color',style: GoogleFonts.nunitoSans(fontWeight: FontWeight.normal,fontSize: 14,color: Colors.black45),),
-                          SizedBox(height: 20.h,),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          Text(
+                            'Color',
+                            style: GoogleFonts.nunitoSans(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 14,
+                                color: Colors.black45),
+                          ),
+                          SizedBox(
+                            height: 20.h,
+                          ),
                           Row(
                             children: [
                               CircleAvatar(
                                 backgroundColor: Color(0XFF3E3E3E),
                               ),
-                              SizedBox(width: 20.w,),
-                              CircleAvatar(backgroundColor: Color(0XFFAB4444),),
-                              SizedBox(width: 20.w,),
-                              CircleAvatar(backgroundColor: Color(0XFFE2D1D1),),
+                              SizedBox(
+                                width: 20.w,
+                              ),
+                              CircleAvatar(
+                                backgroundColor: Color(0XFFAB4444),
+                              ),
+                              SizedBox(
+                                width: 20.w,
+                              ),
+                              CircleAvatar(
+                                backgroundColor: Color(0XFFE2D1D1),
+                              ),
                             ],
                           ),
-                          SizedBox(height: 20.h,),
+                          SizedBox(
+                            height: 20.h,
+                          ),
                           Row(
                             children: [
-                              Text('Total rate value',style: GoogleFonts.nunitoSans(fontWeight: FontWeight.bold,fontSize: 16),),
+                              Text(
+                                'Total rate value',
+                                style: GoogleFonts.nunitoSans(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
                               Spacer(),
-                              Text('(3/5)',style: GoogleFonts.nunitoSans(fontWeight: FontWeight.bold,fontSize: 16),),
+                              Text(
+                                '(3/5)',
+                                style: GoogleFonts.nunitoSans(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
                             ],
                           ),
-                          SizedBox(height: 20.h,),
-                          AppElevatedBotton(title: 'Confirm Add To Cart', onPressed: (){
-                            showSnackBar(context, message: 'Successfully added to cart',erorr: false);
-                            Future.delayed(Duration(milliseconds: 500),(){
-                              Navigator.pop(context);
-                            });
-                          }),
+                          SizedBox(
+                            height: 20.h,
+                          ),
+                          AppElevatedBotton(
+                              title: 'Confirm Add To Cart',
+                              onPressed: () {
+                                showSnackBar(context,
+                                    message: 'Successfully added to cart',
+                                    erorr: false);
+                                Future.delayed(Duration(milliseconds: 500), () {
+                                  Navigator.pop(context);
+                                });
+                              }),
                         ],
                       ),
                     );

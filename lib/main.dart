@@ -4,16 +4,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_store/screen/app/addresses/address_screen.dart';
 import 'package:smart_store/screen/app/bn_screens/cart_screens/cart_screen.dart';
+import 'package:smart_store/screen/app/bn_screens/like_product_screen.dart';
+import 'package:smart_store/screen/app/bn_screens/settings/change_password_screen.dart';
 import 'package:smart_store/screen/app/bottom_nav_screen.dart';
 import 'package:smart_store/screen/app/categories_screen.dart';
 import 'package:smart_store/screen/app/bn_screens/favorite_screen.dart';
 import 'package:smart_store/screen/app/bn_screens/home_screen.dart';
+import 'package:smart_store/screen/app/drawer_screens/about_screen.dart';
+import 'package:smart_store/screen/app/drawer_screens/contact_screen.dart';
+import 'package:smart_store/screen/app/drawer_screens/notification_screen.dart';
 import 'package:smart_store/screen/app/drawer_screens/order_detils_screen.dart';
 import 'package:smart_store/screen/app/drawer_screens/order_screen.dart';
-import 'package:smart_store/screen/app/payment_cards_screen.dart';
+import 'package:smart_store/screen/app/payment/add_payment_screen.dart';
+import 'package:smart_store/screen/app/payment/payment_cards_screen.dart';
 import 'package:smart_store/screen/app/product_screen.dart';
-import 'package:smart_store/screen/app/bn_screens/profile_screen.dart';
+import 'package:smart_store/screen/app/bn_screens/settings/profile_screen.dart';
 import 'package:smart_store/screen/app/bn_screens/setting_screen.dart';
+import 'package:smart_store/screen/app/products_screen.dart';
 import 'package:smart_store/screen/app/subcategory_screen.dart';
 import 'package:smart_store/screen/app/addresses/updated_address_screen.dart';
 import 'package:smart_store/screen/auth/fotget_password_screen.dart';
@@ -84,15 +91,22 @@ class MyApp extends StatelessWidget {
               '/categorise_screen' : (context) => const CategoriesScreen(),
               '/subcategory_screen' : (context) => const SubCategoryScreen(),
               '/product_screen' : (context) => const ProductScreen(),
-              '/profile_screen' : (context) => const ProfileScreen(),
+              '/products_screen' : (context) => const ProductsScreen(),
+              '/like_product_screen' : (context) => const LikeProductScreen(),
               '/settings_screen' : (context) => const SettingsScreen(),
               '/bottom_nav_screen' : (context) => const BottomNavigationScreen(),
               '/address_screen' : (context) => const AddressScreen(),
               '/updated_address_screen' : (context) => const UpdatedAddressScreen(),
               '/payment_cards_screen' : (context) => const PaymentCardsScreen(),
+              '/add_payment_screen' : (context) => const AddPaymentScreen(),
               '/cart_screen' : (context) => const CartScreen(),
               '/orders_screen' : (context) => const OrdersScreen(),
               '/orders_details_screen' : (context) => const OrderDetailsScreen(),
+              '/notification_screen' : (context) => const NotificationScreen(),
+              '/profile_screen' : (context) => const ProfileScreen(),
+              '/change_password_screen' : (context) => const ChangePasswordScreen(),
+              '/about_screen' : (context) => const AboutScreen(),
+              '/contact_screen' : (context) => const ContactScreen(),
 
             },
           );

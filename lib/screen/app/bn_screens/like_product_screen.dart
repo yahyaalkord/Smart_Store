@@ -2,28 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class FavoriteScreen extends StatefulWidget {
-  const FavoriteScreen({Key? key}) : super(key: key);
+class LikeProductScreen extends StatefulWidget {
+  const LikeProductScreen({Key? key}) : super(key: key);
 
   @override
-  State<FavoriteScreen> createState() => _FavoriteScreenState();
+  State<LikeProductScreen> createState() => _LikeProductScreenState();
 }
 
-class _FavoriteScreenState extends State<FavoriteScreen> {
+class _LikeProductScreenState extends State<LikeProductScreen> {
 
   bool _favorite = true;
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 20.h),
-      itemCount: 10,
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, '/product_screen');
-          },
-          child: Container(
+    return Scaffold(
+      appBar: AppBar(title: Text('Products you may like..'),),
+      body: ListView.builder(
+        padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 20.h),
+        itemCount: 10,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return Container(
             height: 100,
             margin: EdgeInsetsDirectional.only(bottom: index == 9 ? 0 : 15),
             decoration: BoxDecoration(
@@ -65,39 +63,23 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                     ],
                   ),
                   Spacer(),
-                  Column(
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      IconButton(
-                          onPressed: () {
-                            setState((){
-                              _favorite = !_favorite;
-                            });
-                          },
-                          icon: Icon(
-                            _favorite ? Icons.favorite : Icons.favorite_border,
-                            color: Color(0XFFFF7750),
-                          )
-                      ),
-                      Spacer(),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Icon(Icons.star,color: Color(0XFFFF7750),size: 15.sp,),
-                          Icon(Icons.star,color: Color(0XFFFF7750),size: 15.sp,),
-                          Icon(Icons.star,color: Color(0XFFFF7750),size: 15.sp,),
-                          Icon(Icons.star,color: Color(0XFFFF7750),size: 15.sp,),
-                          Icon(Icons.star,color: Color(0XFFFF7750),size: 15.sp,),
-                        ],
-                      ),
-                      SizedBox(height: 10.h,),
+                      Icon(Icons.star,color: Color(0XFFFF7750),size: 15.sp,),
+                      Icon(Icons.star,color: Color(0XFFFF7750),size: 15.sp,),
+                      Icon(Icons.star,color: Color(0XFFFF7750),size: 15.sp,),
+                      Icon(Icons.star,color: Color(0XFFFF7750),size: 15.sp,),
+                      Icon(Icons.star,color: Color(0XFFFF7750),size: 15.sp,),
                     ],
-                  )
+                  ),
+                  SizedBox(height: 10.h,)
                 ],
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
