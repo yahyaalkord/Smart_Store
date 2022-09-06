@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:smart_store/api/auth_api_controller.dart';
 import 'package:smart_store/model/bn_screen.dart';
+import 'package:smart_store/models/api_response.dart';
 import 'package:smart_store/screen/app/bn_screens/cart_screens/cart_screen.dart';
 import 'package:smart_store/screen/app/bn_screens/favorite_screen.dart';
 import 'package:smart_store/screen/app/bn_screens/home_screen.dart';
@@ -22,7 +24,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   final List<BnScreen> _screens = <BnScreen>[
     const BnScreen(title: 'Home', widget: HomeScreen()),
     const BnScreen(title: 'favorite', widget: FavoriteScreen()),
-    const BnScreen(title: 'Cart', widget: CartScreen()),
+    /*const*/ BnScreen(title: 'Cart', widget: CartScreen()),
     const BnScreen(title: 'Settings', widget: SettingsScreen()),
   ];
 
@@ -55,7 +57,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
                 'yahyaalkurd98@gmail.com',
                 style: GoogleFonts.nunitoSans(),
               ),
-             
+
             ),
 
             ListTile(
@@ -186,7 +188,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
               ),
               label: 'favorite',
             ),
-             BottomNavigationBarItem(
+            BottomNavigationBarItem(
               activeIcon: Icon(Icons.shopping_cart_rounded),
               icon:  Icon(
                 Icons.shopping_cart_outlined,
@@ -228,9 +230,13 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/login_screen');
+              onPressed: () async{
+                ApiResponse apiResponse = await AuthApiController().logout();
+                if(apiResponse.success){
+                  Navigator.pop(context);
+                  Navigator.pushReplacementNamed(context, '/login_screen');
+                }
+
               },
               child: Text(
                 'Yes',

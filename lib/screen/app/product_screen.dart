@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_store/utils/helpers.dart';
 import 'package:smart_store/widget/app_elevated_botton.dart';
 import 'package:smart_store/widget/product_page_view.dart';
 
+import '../../get/cart_getx_cntroller.dart';
+import '../../models/cart.dart';
 import '../../widget/page_view_content.dart';
 import '../../widget/page_view_idicator.dart';
 
@@ -37,6 +41,7 @@ class _ProductScreenState extends State<ProductScreen>
     _tabController.dispose();
     super.dispose();
   }
+  CartGetxController cartGetxController = Get.put<CartGetxController>(CartGetxController());
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +55,7 @@ class _ProductScreenState extends State<ProductScreen>
                 onPressed: () {
                   Navigator.pushNamed(context, '/cart_screen');
                 },
-                icon: Icon(Icons.card_travel)),
+                icon: const Icon(Icons.card_travel)),
           ),
         ],
       ),
@@ -114,7 +119,7 @@ class _ProductScreenState extends State<ProductScreen>
                         style: GoogleFonts.nunitoSans(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: Color(0XFFFF7750)),
+                            color: const Color(0XFFFF7750)),
                       ),
                       const Spacer(),
                       IconButton(
@@ -259,7 +264,7 @@ class _ProductScreenState extends State<ProductScreen>
                                 style: GoogleFonts.nunitoSans(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
-                                    color: Color(0XFFFF7750)),
+                                    color: const Color(0XFFFF7750)),
                               ),
                               const Spacer(),
                               IconButton(
@@ -341,19 +346,19 @@ class _ProductScreenState extends State<ProductScreen>
                           ),
                           Row(
                             children: [
-                              CircleAvatar(
+                              const CircleAvatar(
                                 backgroundColor: Color(0XFF3E3E3E),
                               ),
                               SizedBox(
                                 width: 20.w,
                               ),
-                              CircleAvatar(
+                              const CircleAvatar(
                                 backgroundColor: Color(0XFFAB4444),
                               ),
                               SizedBox(
                                 width: 20.w,
                               ),
-                              CircleAvatar(
+                              const CircleAvatar(
                                 backgroundColor: Color(0XFFE2D1D1),
                               ),
                             ],
@@ -368,7 +373,7 @@ class _ProductScreenState extends State<ProductScreen>
                                 style: GoogleFonts.nunitoSans(
                                     fontWeight: FontWeight.bold, fontSize: 16),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               Text(
                                 '(3/5)',
                                 style: GoogleFonts.nunitoSans(
@@ -385,7 +390,7 @@ class _ProductScreenState extends State<ProductScreen>
                                 showSnackBar(context,
                                     message: 'Successfully added to cart',
                                     erorr: false);
-                                Future.delayed(Duration(milliseconds: 500), () {
+                                Future.delayed(const Duration(milliseconds: 500), () {
                                   Navigator.pop(context);
                                 });
                               }),
@@ -397,4 +402,5 @@ class _ProductScreenState extends State<ProductScreen>
               });
         });
   }
+
 }

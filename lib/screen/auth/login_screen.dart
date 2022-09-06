@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:smart_store/api/auth_api_controller.dart';
+import 'package:smart_store/models/api_response.dart';
 import 'package:smart_store/utils/helpers.dart';
 import 'package:smart_store/widget/app_elevated_botton.dart';
 import 'package:smart_store/widget/app_text_field.dart';
@@ -13,7 +15,7 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with Helpers{
+class _LoginScreenState extends State<LoginScreen> with Helpers {
   late TextEditingController _mobileTextController;
   late TextEditingController _passwordTextController;
   bool _obscur = true;
@@ -43,34 +45,37 @@ class _LoginScreenState extends State<LoginScreen> with Helpers{
       appBar: AppBar(
         title: const Text('LOGIN'),
         actions: [
-          PopupMenuButton<String>(icon: Icon(Icons.language),onSelected: (String value) {
-            if (_box != value) {
-              setState(() {
-                _box = value;
-                _cuonter = 0;
-              });
-            }
-          }, itemBuilder: (context) {
-            return [
-              PopupMenuItem(
-                child: Text(
-                  'English',
-                  style: GoogleFonts.nunitoSans(),
-                ),
-                value: 'en',
-                height: 20,
-              ),
-              const PopupMenuDivider(),
-              PopupMenuItem(
-                child: Text(
-                  'العربية',
-                  style: GoogleFonts.nunitoSans(),
-                ),
-                value: 'ar',
-                height: 20,
-              ),
-            ];
-          }),
+          PopupMenuButton<String>(
+              icon: const Icon(Icons.language),
+              onSelected: (String value) {
+                if (_box != value) {
+                  setState(() {
+                    _box = value;
+                    _cuonter = 0;
+                  });
+                }
+              },
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                    child: Text(
+                      'English',
+                      style: GoogleFonts.nunitoSans(),
+                    ),
+                    value: 'en',
+                    height: 20,
+                  ),
+                  const PopupMenuDivider(),
+                  PopupMenuItem(
+                    child: Text(
+                      'العربية',
+                      style: GoogleFonts.nunitoSans(),
+                    ),
+                    value: 'ar',
+                    height: 20,
+                  ),
+                ];
+              }),
         ],
         automaticallyImplyLeading: false,
       ),
@@ -95,7 +100,8 @@ class _LoginScreenState extends State<LoginScreen> with Helpers{
             AppTextField(
                 hint: 'mobile ',
                 prefixIcon: Icons.phone,
-                keyboardType: TextInputType.numberWithOptions(signed: false,decimal: false),
+                keyboardType: const TextInputType.numberWithOptions(
+                    signed: false, decimal: false),
                 controller: _mobileTextController),
             SizedBox(
               height: 20.h,
@@ -129,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> with Helpers{
                     style: GoogleFonts.nunitoSans(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Color(0XFFFF7750)),
+                        color: const Color(0XFFFF7750)),
                   )),
             ),
             const Spacer(),
@@ -153,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> with Helpers{
                     style: GoogleFonts.nunitoSans(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: Color(0XFFFF7750),
+                      color: const Color(0XFFFF7750),
                     ),
                   ),
                 ),
@@ -176,10 +182,19 @@ class _LoginScreenState extends State<LoginScreen> with Helpers{
         _passwordTextController.text.isNotEmpty) {
       return true;
     }
-   showSnackBar(context, message: 'Enter required data', erorr: true);
+    showSnackBar(context, message: 'Enter required data', erorr: true);
     return false;
   }
-  void _login() {
-    Navigator.pushReplacementNamed(context, '/bottom_nav_screen');
+
+  void _login() async {
+    //TODO: Call login api request
+    ApiResponse apiResponse = await AuthApiController().login(
+        mobile: _mobileTextController.text,
+        password: _passwordTextController.text);
+    if (apiResponse.success) {
+      Navigator.pushReplacementNamed(context, '/bottom_nav_screen');
+    }
+    showSnackBar(context,
+        message: apiResponse.message, erorr: !apiResponse.success);
   }
 }

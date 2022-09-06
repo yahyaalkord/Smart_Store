@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:smart_store/prefs/shared_pref_controller.dart';
 import 'package:smart_store/screen/app/addresses/address_screen.dart';
 import 'package:smart_store/screen/app/bn_screens/cart_screens/cart_screen.dart';
 import 'package:smart_store/screen/app/bn_screens/like_product_screen.dart';
@@ -31,7 +32,12 @@ import 'package:smart_store/screen/auth/verification_screen.dart';
 import 'package:smart_store/screen/launch_screen.dart';
 import 'package:smart_store/screen/on_boarding_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-void main() {
+
+import 'database/db_controller.dart';
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedPrefController().initPreferences();
+  await DbController().initDatabase();
   runApp(const MyApp());
 }
 
@@ -83,13 +89,13 @@ class MyApp extends StatelessWidget {
               '/onBoarding_screen' : (context) => const OnBoardingScreen(),
               '/login_screen' : (context) => const LoginScreen(),
               '/forget_password_screen' : (context) => const ForgetPasswordScreen(),
-              '/verification_screen' : (context) => const VerificationScreen(),
+              // '/verification_screen' : (context) => const VerificationScreen(),
               '/reset_password_screen' : (context) => const ResetPasswordScreen(),
               '/signup_screen' : (context) => const SignUpScreen(),
               '/home_screen' : (context) => const HomeScreen(),
               '/favorite_screen' : (context) => const FavoriteScreen(),
               '/categorise_screen' : (context) => const CategoriesScreen(),
-              '/subcategory_screen' : (context) => const SubCategoryScreen(),
+              // '/subcategory_screen' : (context) => const SubCategoryScreen(),
               '/product_screen' : (context) => const ProductScreen(),
               '/products_screen' : (context) => const ProductsScreen(),
               '/like_product_screen' : (context) => const LikeProductScreen(),
@@ -99,7 +105,7 @@ class MyApp extends StatelessWidget {
               '/updated_address_screen' : (context) => const UpdatedAddressScreen(),
               '/payment_cards_screen' : (context) => const PaymentCardsScreen(),
               '/add_payment_screen' : (context) => const AddPaymentScreen(),
-              '/cart_screen' : (context) => const CartScreen(),
+              '/cart_screen' : (context) => /*const*/ CartScreen(),
               '/orders_screen' : (context) => const OrdersScreen(),
               '/orders_details_screen' : (context) => const OrderDetailsScreen(),
               '/notification_screen' : (context) => const NotificationScreen(),

@@ -87,10 +87,10 @@ class _PaymentCardsScreenState extends State<PaymentCardsScreen> with Helpers{
           height: 400.h,
           width: 295.w,
           decoration: BoxDecoration(
-            boxShadow: [
-              const BoxShadow(
+            boxShadow: const [
+              BoxShadow(
                 color: Colors.black45,
-                offset: const Offset(3, 3),
+                offset: Offset(3, 3),
                 blurRadius: 6,
               )
             ],
@@ -117,8 +117,8 @@ class _PaymentCardsScreenState extends State<PaymentCardsScreen> with Helpers{
       floatingActionButton: Padding(
         padding:  EdgeInsetsDirectional.only(end: 55.w,bottom: 20.h),
         child: FloatingActionButton(
-            backgroundColor: Color(0XFFFF7750),
-            child: Icon(Icons.add),
+            backgroundColor: const Color(0XFFFF7750),
+            child: const Icon(Icons.add),
             onPressed: (){
               Navigator.pushNamed(context, '/add_payment_screen');
             }),
