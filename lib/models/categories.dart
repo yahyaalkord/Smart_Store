@@ -8,8 +8,6 @@ class Categories {
  late String imageUrl;
 
 
-
-
   Categories.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     nameEn = json['name_en'];
@@ -17,6 +15,14 @@ class Categories {
     image = json['image'];
     productsCount = json['products_count'];
     subCategoriesCount = json['sub_categories_count'];
+    imageUrl = json['image_url'];
+  }
+
+  Categories.fromHomeJson(Map<String, dynamic> json) {
+    id = json['id'];
+    nameEn = json['name_en'];
+    nameAr = json['name_ar'];
+    image = json['image'];
     imageUrl = json['image_url'];
   }
 

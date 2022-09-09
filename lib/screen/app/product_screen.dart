@@ -3,17 +3,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:smart_store/get/product_getx_controller.dart';
+import 'package:smart_store/models/api_response.dart';
+import 'package:smart_store/models/product.dart';
 import 'package:smart_store/utils/helpers.dart';
 import 'package:smart_store/widget/app_elevated_botton.dart';
 import 'package:smart_store/widget/product_page_view.dart';
 
+import '../../api/product_api_controller.dart';
 import '../../get/cart_getx_cntroller.dart';
 import '../../models/cart.dart';
 import '../../widget/page_view_content.dart';
 import '../../widget/page_view_idicator.dart';
 
 class ProductScreen extends StatefulWidget {
-  const ProductScreen({Key? key}) : super(key: key);
+  const ProductScreen({required this.id, Key? key}) : super(key: key);
+  final int id;
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
@@ -21,6 +26,10 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen>
     with SingleTickerProviderStateMixin, Helpers {
+
+  CartGetxController cartGetxController =
+  Get.put<CartGetxController>(CartGetxController());
+
   late PageController _pageController;
   late TabController _tabController;
   int _currentPage = 0;
@@ -30,6 +39,7 @@ class _ProductScreenState extends State<ProductScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
+    ProductsApiController().getHomeData();
     _pageController = PageController();
     _tabController = TabController(length: 5, vsync: this);
   }
@@ -41,7 +51,8 @@ class _ProductScreenState extends State<ProductScreen>
     _tabController.dispose();
     super.dispose();
   }
-  CartGetxController cartGetxController = Get.put<CartGetxController>(CartGetxController());
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,173 +70,193 @@ class _ProductScreenState extends State<ProductScreen>
           ),
         ],
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            const Align(
-              alignment: AlignmentDirectional.topEnd,
-            ),
-            Expanded(
-              child: PageView(
-                physics: const BouncingScrollPhysics(),
-                // physics: ClampingScrollPhysics(),
-                controller: _pageController,
-                scrollDirection: Axis.horizontal,
-                onPageChanged: (int currentPage) {
-                  setState(() {
-                    _currentPage = currentPage;
-                  });
-                },
-                children: const [
-                  ProductPageView(image: 'Jacket'),
-                  ProductPageView(image: 'Jacket'),
-                  ProductPageView(image: 'Jacket'),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              PageViewIndicator(
-                isCurrentPage: _currentPage == 0,
-                marginEnd: 15,
-              ),
-              PageViewIndicator(
-                isCurrentPage: _currentPage == 1,
-                marginEnd: 15,
-              ),
-              PageViewIndicator(
-                isCurrentPage: _currentPage == 2,
-              ),
-            ]),
-            SizedBox(
-              height: 10.h,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25.h),
+      body: GetBuilder<ProductGetController>(
+        init: ProductGetController(id: widget.id),
+        builder: (controller) {
+      var product = controller.products;
+      if(controller.loading == true){
+        return Center(child: CircularProgressIndicator(),);
+      } else if (product != null){
+            return SafeArea(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Jacket Pullover Sweat Hoodie',
-                    style: GoogleFonts.nunitoSans(
-                        fontWeight: FontWeight.bold, fontSize: 16),
+                  const Align(
+                    alignment: AlignmentDirectional.topEnd,
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        '\$40',
-                        style: GoogleFonts.nunitoSans(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: const Color(0XFFFF7750)),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _favorite = !_favorite;
-                            });
-                          },
-                          icon: Icon(
-                            _favorite ? Icons.favorite : Icons.favorite_border,
-                            color: const Color(0XFFFF7750),
-                          )),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Text(
-                    'Siz',
-                    style: GoogleFonts.nunitoSans(
-                        fontWeight: FontWeight.normal,
-                        fontSize: 14,
-                        color: Colors.black45),
-                  ),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: 50.h),
-                    child: TabBar(
-                      // indicatorColor: Colors.transparent,
-                      indicator: BoxDecoration(
-                          color: const Color(0XFFFF7750),
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black45,
-                              blurRadius: 5,
-                              offset: Offset(0, 3),
-                            )
-                          ]),
-                      controller: _tabController,
-                      labelColor: Colors.black,
-                      onTap: (int tabIndex) {
+                  Expanded(
+                    child:PageView(
+                      physics: const BouncingScrollPhysics(),
+                      // physics: ClampingScrollPhysics(),
+                      controller: _pageController,
+                      scrollDirection: Axis.horizontal,
+                      onPageChanged: (int currentPage) {
                         setState(() {
-                          _tabController.index = tabIndex;
+                          _currentPage = currentPage;
                         });
                       },
-                      tabs: const [
-                        Tab(
-                          text: 'S',
+                      children: product.images.map((e) => Image.network(e)).toList(),
+                    ),
+                  ),
+
+                  //***********
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    PageViewIndicator(
+                      isCurrentPage: _currentPage == 0,
+                      marginEnd: 15,
+                    ),
+                    PageViewIndicator(
+                      isCurrentPage: _currentPage == 1,
+                      marginEnd: 15,
+                    ),
+                    PageViewIndicator(
+                      isCurrentPage: _currentPage == 2,
+                    ),
+                  ]),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.h),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          product.nameEn,
+                          style: GoogleFonts.nunitoSans(
+                              fontWeight: FontWeight.bold, fontSize: 16),
                         ),
-                        Tab(
-                          text: 'M',
+                        Row(
+                          children: [
+                            Text(
+                              '\$ ${product.price}',
+                              style: GoogleFonts.nunitoSans(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: const Color(0XFFFF7750)),
+                            ),
+                            const Spacer(),
+                            IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _favorite = !_favorite;
+                                  });
+                                },
+                                icon: Icon(
+                                  _favorite ? Icons.favorite : Icons.favorite_border,
+                                  color: const Color(0XFFFF7750),
+                                )),
+                          ],
                         ),
-                        Tab(
-                          text: 'L',
+                        SizedBox(
+                          height: 20.h,
                         ),
-                        Tab(
-                          text: 'XL',
+                        Text(
+                          'Siz',
+                          style: GoogleFonts.nunitoSans(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 14,
+                              color: Colors.black45),
                         ),
-                        Tab(
-                          text: 'XXL',
+                        ConstrainedBox(
+                          constraints: BoxConstraints(maxHeight: 50.h),
+                          child: TabBar(
+                            // indicatorColor: Colors.transparent,
+                            indicator: BoxDecoration(
+                                color: const Color(0XFFFF7750),
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black45,
+                                    blurRadius: 5,
+                                    offset: Offset(0, 3),
+                                  )
+                                ]),
+                            controller: _tabController,
+                            labelColor: Colors.black,
+                            onTap: (int tabIndex) {
+                              setState(() {
+                                _tabController.index = tabIndex;
+                              });
+                            },
+                            tabs: const [
+                              Tab(
+                                text: 'S',
+                              ),
+                              Tab(
+                                text: 'M',
+                              ),
+                              Tab(
+                                text: 'L',
+                              ),
+                              Tab(
+                                text: 'XL',
+                              ),
+                              Tab(
+                                text: 'XXL',
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 50.h,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.w),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.r),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black38,
+                            offset: Offset(0, 3),
+                            blurRadius: 6,
+                          ),
+                        ],
+                        color: const Color(0XFFFF7750),
+                      ),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(double.infinity, 63.h),
+                          primary: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                        ),
+                        onPressed: () {
+                          cartGetxController.create(getCart(product));
+                          // _showConfirmyBottomSheet();
+                        },
+                        child: Text(
+                          'Add To Cart',
+                          style: GoogleFonts.nunitoSans(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 25.h,
+                  )
                 ],
               ),
-            ),
-            SizedBox(
-              height: 50.h,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25.w),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.r),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black38,
-                      offset: Offset(0, 3),
-                      blurRadius: 6,
-                    ),
-                  ],
-                  color: const Color(0XFFFF7750),
-                ),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 63.h),
-                    primary: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                  ),
-                  onPressed: () {
-                    _showConfirmyBottomSheet();
-                  },
-                  child: Text(
-                    'Add To Cart',
-                    style: GoogleFonts.nunitoSans(fontWeight: FontWeight.bold),
-                  ),
-                ),
+            );
+          } else {
+            return Center(
+              child: Text(
+                'NoData',
+                style: GoogleFonts.nunitoSans(
+                    fontWeight: FontWeight.bold, fontSize: 20.sp),
               ),
-            ),
-            SizedBox(
-              height: 25.h,
-            )
-          ],
-        ),
+            );
+          }
+        },
       ),
+
+
+
     );
   }
 
@@ -253,7 +284,7 @@ class _ProductScreenState extends State<ProductScreen>
                             height: 15.h,
                           ),
                           Text(
-                            'Jacket Pullover Sweat Hoodie',
+                            '',
                             style: GoogleFonts.nunitoSans(
                                 fontWeight: FontWeight.bold, fontSize: 16),
                           ),
@@ -390,7 +421,9 @@ class _ProductScreenState extends State<ProductScreen>
                                 showSnackBar(context,
                                     message: 'Successfully added to cart',
                                     erorr: false);
-                                Future.delayed(const Duration(milliseconds: 500), () {
+                                Future.delayed(
+                                    const Duration(milliseconds: 500), () {
+                                  // cartGetxController.create(getCart(product))
                                   Navigator.pop(context);
                                 });
                               }),
@@ -402,5 +435,7 @@ class _ProductScreenState extends State<ProductScreen>
               });
         });
   }
-
+  Cart getCart(Products product) {
+    return Cart.fromProductJson(product.toMap());
+  }
 }

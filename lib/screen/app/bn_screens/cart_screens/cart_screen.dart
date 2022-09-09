@@ -18,6 +18,8 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> with Helpers {
+  CartGetxController controller =
+      Get.put<CartGetxController>(CartGetxController());
 
   late TextEditingController _textEditingController;
   int _cuonter = 0;
@@ -38,221 +40,222 @@ class _CartScreenState extends State<CartScreen> with Helpers {
     super.dispose();
   }
 
-  CartGetxController cartGetxController = Get.put<CartGetxController>(CartGetxController());
-
-  CartGetxController controller = CartGetxController.to;
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          actions: [
-            Padding(
-              padding: EdgeInsetsDirectional.only(end: 20.w),
-              child: DecoratedBox(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.r),
-                      boxShadow: const [BoxShadow(color: Color(0XFFF9F3EE))]),
-                  child: IconButton(
-                      onPressed: () {
-                        CartGetxController.to.clear();
-                      },
-                      icon: const Icon(
-                        Icons.delete,
-                        size: 30,
-                        color: Colors.red,
-                      ))),
-            ),
-          ],
-        ),
-        body: Obx(() {
-          if (controller.loading.isTrue) {
+    return GetBuilder<CartGetxController>(
+        init: CartGetxController(),
+        builder: (controller) {
+          if (controller.loading) {
             return Center(
               child: CircularProgressIndicator(),
             );
           } else if (controller.cartItems.isNotEmpty) {
-            return ListView(
-              padding: EdgeInsets.symmetric(vertical: 20.h),
-              children: [
-                ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      height: 90,
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.symmetric(
-                        horizontal: 15.w,
-                        vertical: 10.h,
-                      ),
-                      padding:
-                          EdgeInsetsDirectional.only(start: 15.w, end: 5.w),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.r),
-                        color: Colors.white,
-                        boxShadow: const [
-                          BoxShadow(
-                            offset: Offset(0, 0),
-                            color: Colors.black45,
-                            blurRadius: 4,
-                          ),
-                        ],
-                      ),
-                      child: Stack(
-                        children: [
-                          PositionedDirectional(
-                            end: 0,
-                            top: 0,
-                            child: IconButton(
+            var cart = controller.cartItems;
+            return Scaffold(
+                appBar: AppBar(
+                  actions: [
+                    Padding(
+                      padding: EdgeInsetsDirectional.only(end: 20.w),
+                      child: DecoratedBox(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.r),
+                              boxShadow: const [
+                                BoxShadow(color: Color(0XFFF9F3EE))
+                              ]),
+                          child: IconButton(
                               onPressed: () {
-                                CartGetxController.to
-                                    .changeQuantity(index, 0);
+                                cart.clear();
                               },
-                              icon: const Icon(Icons.close),
-                              color: Colors.red,
-                              visualDensity: const VisualDensity(
-                                vertical: VisualDensity.minimumDensity,
-                                horizontal: VisualDensity.minimumDensity,
-                              ),
-                            ),
+                              icon: const Icon(
+                                Icons.delete,
+                                size: 30,
+                                color: Colors.red,
+                              ))),
+                    ),
+                  ],
+                ),
+                body: ListView(
+                  padding: EdgeInsets.symmetric(vertical: 20.h),
+                  children: [
+                    ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: 3,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          height: 90,
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 15.w,
+                            vertical: 10.h,
                           ),
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundImage:
-                                    const AssetImage('images/caty.png'),
-                                radius: 30.r,
+                          padding:
+                              EdgeInsetsDirectional.only(start: 15.w, end: 5.w),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.r),
+                            color: Colors.white,
+                            boxShadow: const [
+                              BoxShadow(
+                                offset: Offset(0, 0),
+                                color: Colors.black45,
+                                blurRadius: 4,
                               ),
-                              SizedBox(width: 10.w),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Home furnishing',
-                                      style: GoogleFonts.nunitoSans(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14.sp,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Quantity:   ${controller.cartItems[index].count}    Total:   \$${controller.cartItems[index].total}',
-                                      style: GoogleFonts.nunitoSans(
-                                        fontWeight: FontWeight.w300,
-                                        height: 1.0,
-                                        fontSize: 12.sp,
-                                      ),
-                                    ),
-                                  ],
+                            ],
+                          ),
+                          child: Stack(
+                            children: [
+                              PositionedDirectional(
+                                end: 0,
+                                top: 0,
+                                child: IconButton(
+                                  onPressed: () {
+                                    controller.changeQuantity(index, 0);
+                                  },
+                                  icon: const Icon(Icons.close),
+                                  color: Colors.red,
+                                  visualDensity: const VisualDensity(
+                                    vertical: VisualDensity.minimumDensity,
+                                    horizontal: VisualDensity.minimumDensity,
+                                  ),
                                 ),
                               ),
                               Row(
                                 children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      CartGetxController.to.changeQuantity(index, controller.cartItems[index].count + 1);
-                                    },
-                                    iconSize: 20,
-                                    icon: const Icon(
-                                      Icons.add,
-                                      color: Colors.green,
+                                  CircleAvatar(
+                                    backgroundImage:
+                                        NetworkImage(cart[index].img),
+                                    radius: 30.r,
+                                  ),
+                                  SizedBox(width: 10.w),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          cart[index].name,
+                                          style: GoogleFonts.nunitoSans(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14.sp,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Quantity:   ${cart[index].quantity}    Total:   \$${cart[index].price}',
+                                          style: GoogleFonts.nunitoSans(
+                                            fontWeight: FontWeight.w300,
+                                            height: 1.0,
+                                            fontSize: 12.sp,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  IconButton(
-                                    padding:
-                                        EdgeInsetsDirectional.only(top: 10.h),
-                                    onPressed: () {
-                                      CartGetxController.to.changeQuantity(index, controller.cartItems[index].count - 1);
-                                    },
-                                    iconSize: 20,
-                                    icon: const Icon(Icons.remove),
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          controller.changeQuantity(
+                                              index, cart[index].quantity += 1);
+                                        },
+                                        iconSize: 20,
+                                        icon: const Icon(
+                                          Icons.add,
+                                          color: Colors.green,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        padding: EdgeInsetsDirectional.only(
+                                            top: 10.h),
+                                        onPressed: () {
+                                          controller.changeQuantity(
+                                              index, cart[index].quantity += 1);
+                                        },
+                                        iconSize: 20,
+                                        icon: const Icon(Icons.remove),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                        ],
+                        );
+                      },
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 15.w),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 15.w,
+                        ),
+                        color: const Color(0XFFF9F3EE),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  'Total:',
+                                  style: GoogleFonts.nunitoSans(
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  controller.total.toString(),
+                                  style: GoogleFonts.nunitoSans(
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10.h),
+                            Row(
+                              children: [
+                                Text(
+                                  'Quantity:',
+                                  style: GoogleFonts.nunitoSans(
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  '\$${controller.itemsCount.toString()}',
+                                  style: GoogleFonts.nunitoSans(
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    );
-                  },
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15.w),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 15.w,
                     ),
-                    color: const Color(0XFFF9F3EE),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Total:',
-                              style: GoogleFonts.nunitoSans(
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Spacer(),
-                            Text(
-                              controller.total.toString(),
-                              style: GoogleFonts.nunitoSans(
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10.h),
-                        Row(
-                          children: [
-                            Text(
-                              'Quantity:',
-                              style: GoogleFonts.nunitoSans(
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Spacer(),
-                            Text(
-                              '\$${controller.quantity.toString()}',
-                              style: GoogleFonts.nunitoSans(
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                    SizedBox(
+                      height: 30.h,
                     ),
-                  ),
-                ),
-                SizedBox(
-                  height: 30.h,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.w),
-                  child: AppElevatedBotton(
-                      title: 'Buy Now !',
-                      onPressed: () => _showConfirmyBottomSheet()),
-                ),
-              ],
-            );
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 25.w),
+                      child: AppElevatedBotton(
+                          title: 'Buy Now !',
+                          onPressed: () => _showConfirmyBottomSheet()),
+                    ),
+                  ],
+                ));
           } else {
             return Center(
               child: Text(
-                'CART IS EMPTY',
-                style: GoogleFonts.cairo(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24.sp,
-                ),
+                'NO DATA',
+                style: GoogleFonts.nunitoSans(fontSize: 20.sp),
               ),
             );
           }
-        }));
+        });
   }
 
   void _showConfirmyBottomSheet() {

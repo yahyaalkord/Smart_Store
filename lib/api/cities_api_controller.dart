@@ -11,6 +11,7 @@ import '../prefs/shared_pref_controller.dart';
 
  class CitiesApiController with ApiHelper{
   Future<List<Cities>> cities() async{
+
    Uri uri = Uri.parse(ApiSettings.cities);
    var response = await http.get(uri,headers: {
     HttpHeaders.acceptHeader:'application/json',
@@ -21,7 +22,6 @@ import '../prefs/shared_pref_controller.dart';
     var dataJsonObject = json['list'] as List;
     //TODO: save user in shared Preferences
     return dataJsonObject.map((jsonObject) => Cities.fromJson(jsonObject)).toList();
-
    }
    return [];
   }

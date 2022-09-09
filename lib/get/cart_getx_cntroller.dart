@@ -10,84 +10,84 @@ import '../models/cart.dart';
 import '../models/process_responcse.dart';
 
 class CartGetxController extends GetxController {
-  RxList<Cart> cartItems = <Cart>[].obs;
-  RxBool loading = false.obs;
+  List<Cart> cartItems = <Cart>[];
+  bool loading = false;
+  double total = 0;
+  int itemsCount = 0;
 
   static CartGetxController get to => Get.find<CartGetxController>();
 
   @override
   void onInit() {
     read();
+    getTotal();
+    getQuantity();
     super.onInit();
   } // List<Product> products = <Product>[];
 
   final CartDbController _dbController = CartDbController();
-  // final ProductsDbController _productDbController = ProductsDbController();
-
-  double total = 0;
-  double quantity = 0;
 
   Future<ProcessResponse> create(Cart cart) async {
-    int index =
-    cartItems.indexWhere((element) => element.productId == cart.productId);
-    if (index == -1) {
+    int productIndex = cartItems.indexWhere((element) => cart.productId == element.productId);
+    if(productIndex == -1){
       int newRowId = await _dbController.create(cart);
-      if (newRowId != 0) {
-        total += cart.total;
-        quantity += 1;
-        cart.id = newRowId;
-        cartItems.add(cart);
-      }
+      cartItems.add(cart);
+      update();
       return getResponse(newRowId != 0);
-    } else {
-      // int quantity = await _productDbController.getQuantity(cart.productId);
-      int newCount = cartItems[index].count + 1;
-      return changeQuantity(index, newCount);
+    }else{
+      cartItems[productIndex].quantity += 1;
+      update();
+      return changeQuantity(productIndex, cartItems[productIndex].quantity);
     }
   }
 
   void read() async {
-    loading.value = true;
-    cartItems.value = await _dbController.read();
-    for (Cart cart in cartItems) {
-      total += cart.total;
-      quantity += cart.count;
-    }
-    loading.value = false;
+    loading = true;
+    cartItems = await _dbController.read();
+    loading = false;
   }
 
   Future<ProcessResponse> changeQuantity(int index, int count) async {
     bool isDelete = count == 0;
     Cart cart = cartItems[index];
     bool result = isDelete
-        ? await _dbController.delete(cart.id)
+        ? await _dbController.delete(cart.productId)
         : await _dbController.update(cart);
 
-    if (result) {
-      if (isDelete) {
-        total -= cart.total;
-        quantity -= 1;
-        cartItems.removeAt(index);
-      } else {
-        cart.count = count;
-        cart.total = cart.price * cart.count;
-        total += cart.total;
-        quantity += 1;
-        cartItems[index] = cart;
-      }
+    if(isDelete){
+      print("as");
+      total -= cartItems[index].price;
+      cartItems.removeAt(index);
+      itemsCount -= 1;
+    }else{
+      cartItems[index].quantity = count;
+      total += cartItems[index].price;
+      itemsCount += 1;
     }
 
+    if(cartItems.isEmpty){
+      total = 0;
+      itemsCount = 0;
+    }
+    update();
     return getResponse(result);
   }
 
   Future<ProcessResponse> clear() async {
     bool cleared = await _dbController.clear();
     if (cleared) {
-      total = 0;
-      quantity = 0;
       cartItems.clear();
     }
+    update();
     return getResponse(cleared);
+  }
+
+  void getTotal() async {
+    total =  await _dbController.getTotal();
+  }
+
+  void getQuantity() async {
+    itemsCount =  await _dbController.getQuantity();
   }
 
   ProcessResponse getResponse(bool success) {
@@ -97,4 +97,5 @@ class CartGetxController extends GetxController {
       success: success,
     );
   }
+
 }

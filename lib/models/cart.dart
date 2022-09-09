@@ -1,33 +1,37 @@
-class Cart {
-  late int id;
-  late double total;
+
+class Cart{
+  static const String tableName = "cart";
+  late String productId,info,name;
+  late String img;
   late double price;
-  late int count;
-  late int userId;
-  late int productId;
-  late String productName;
+  late int quantity;
 
-  static const String tableName = 'cart';
-
-  Cart();
-
-  Cart.fromMap(Map<String, dynamic> rowMap) {
-    id = rowMap['id'];
-    total = rowMap['total'];
-    price = rowMap['price'];
-    count = rowMap['count'];
-    userId = rowMap['user_id'];
-    productId = rowMap['product_id'];
-    productName = rowMap['name'];
+  Map<String,dynamic> toJson(){
+    Map<String,dynamic> map = {};
+    map["product_id"] = productId;
+    map["quantity"] = quantity;
+    map["name"] = name;
+    map["info"] = info;
+    map["img"] = img;
+    map["price"] = price;
+    return map;
   }
 
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = <String, dynamic>{};
-    map['total'] = total;
-    map['price'] = price;
-    map['count'] = count;
-    map['user_id'] = userId;
-    map['product_id'] = productId;
-    return map;
+  Cart.fromJson(Map<String,dynamic> map){
+    productId = map["product_id"];
+    quantity = map["quantity"];
+    info = map["info"];
+    name = map["name"];
+    price = map["price"];
+    img = map["img"];
+  }
+
+  Cart.fromProductJson(Map<String,dynamic> map){
+    productId = map["id"].toString();
+    quantity = 1;
+    info = map["info_en"];
+    name = map["name_en"];
+    price = double.parse(map["price"]);
+    img = map["image_url"];
   }
 }

@@ -26,15 +26,14 @@ class DbController {
       version: 1,
       onOpen: (Database database) {},
       onCreate: (Database database, int version) async {
-        //TODO: Create tables (users, products, cart) USING SQL
         await database.execute('CREATE TABLE cart ('
             'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-            'total REAL NOT NULL,'
-        // 'count INTEGER NOT NULL DEFAULT 1,'
-            'count INTEGER NOT NULL,'
-            'price REAL NOT NULL,'
-            'user_id INTEGER,'
-            'product_id INTEGER'
+            'product_id TEXT,'
+            'info TEXT,'
+            'name TEXT,'
+            'img TEXT,'
+            'quantity INTEGER,'
+            'price REAL'
             ')');
       },
       onUpgrade: (Database database, int oldVersion, int newVersion) {},

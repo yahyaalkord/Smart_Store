@@ -35,7 +35,7 @@ class ProductPageView extends StatelessWidget {
             Container(
               alignment: Alignment.center,
                 height: 300.h,
-                child: Image.asset('images/$image.png')),
+                child: Image(image: NetworkImage(image))),
 
           ],
         ),

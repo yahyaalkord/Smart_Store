@@ -2,17 +2,18 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:smart_store/screen/app/products_screen.dart';
 
 import '../../api/sup_categories_api_controller.dart';
 import '../../models/sup_categories.dart';
 import 'categories_screen.dart';
+
 int? catId;
 
 class SubCategoryScreen extends StatefulWidget {
-  const SubCategoryScreen({required this.id,Key? key}) : super(key: key);
+  const SubCategoryScreen({required this.id, Key? key}) : super(key: key);
 
- final int id;
-
+  final int id;
 
   @override
   State<SubCategoryScreen> createState() => _SubCategoryScreenState();
@@ -23,10 +24,11 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(title!),
+          title: Text(title??''),
         ),
         body: FutureBuilder<List<SubCategories>>(
-          future: SubCategoriesApiController().getSubCategories(categoryId: widget.id),
+          future: SubCategoriesApiController()
+              .getSubCategories(categoryId: widget.id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
@@ -44,7 +46,13 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, '/product_screen');
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ProductsScreen(id: snapshot.data![index].id),
+                            ));
+                        /*Navigator.pushNamed(context, '/product_screen');*/
                       },
                       child: Card(
                         elevation: 4,
@@ -56,10 +64,14 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                             const Spacer(
                               flex: 1,
                             ),
-                             CircleAvatar(
-                               backgroundColor: Colors.white,
+                            CircleAvatar(
+                              backgroundColor: Colors.white,
                               // backgroundImage: ,
-                              child: Image(image: NetworkImage(snapshot.data![index].imageUrl),fit: BoxFit.cover,),
+                              child: Image(
+                                image: NetworkImage(
+                                    snapshot.data![index].imageUrl),
+                                fit: BoxFit.cover,
+                              ),
                               radius: 60,
                             ),
                             const Spacer(
