@@ -11,4 +11,8 @@ class ApiSettings {
   static const String subCategories = '${_baseUrl}categories/{id}';
   static const String product = '${_baseUrl}sub-categories/{id}';
   static const String productDetails = '${_baseUrl}products/{id}';
+  static const orders = "${_baseUrl}orders/{id}";
+  static const addresses = "${_baseUrl}addresses/{id}";
+  static const updateProfile = "${_baseUrl}auth/update-profile";
+
 }

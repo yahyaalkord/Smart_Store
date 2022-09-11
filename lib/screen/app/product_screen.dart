@@ -6,13 +6,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_store/get/product_getx_controller.dart';
 import 'package:smart_store/models/api_response.dart';
 import 'package:smart_store/models/product.dart';
+import 'package:smart_store/screen/app/bn_screens/cart_screens/cart_screen.dart';
 import 'package:smart_store/utils/helpers.dart';
 import 'package:smart_store/widget/app_elevated_botton.dart';
 import 'package:smart_store/widget/product_page_view.dart';
 
 import '../../api/product_api_controller.dart';
+import '../../get/address_getx_controller.dart';
 import '../../get/cart_getx_cntroller.dart';
 import '../../models/cart.dart';
+import '../../prefs/shared_pref_controller.dart';
 import '../../widget/page_view_content.dart';
 import '../../widget/page_view_idicator.dart';
 
@@ -27,8 +30,6 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen>
     with SingleTickerProviderStateMixin, Helpers {
 
-  CartGetxController cartGetxController =
-  Get.put<CartGetxController>(CartGetxController());
 
   late PageController _pageController;
   late TabController _tabController;
@@ -39,6 +40,8 @@ class _ProductScreenState extends State<ProductScreen>
   void initState() {
     // TODO: implement initState
     super.initState();
+    Get.put<CartGetxController>(CartGetxController());
+    Get.put<AddressGetController>(AddressGetController());
     ProductsApiController().getHomeData();
     _pageController = PageController();
     _tabController = TabController(length: 5, vsync: this);
@@ -52,8 +55,6 @@ class _ProductScreenState extends State<ProductScreen>
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +65,11 @@ class _ProductScreenState extends State<ProductScreen>
             padding: EdgeInsets.symmetric(horizontal: 15.w),
             child: IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/cart_screen');
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return CartScreen();
+                    },
+                  ));
                 },
                 icon: const Icon(Icons.card_travel)),
           ),
@@ -73,10 +78,12 @@ class _ProductScreenState extends State<ProductScreen>
       body: GetBuilder<ProductGetController>(
         init: ProductGetController(id: widget.id),
         builder: (controller) {
-      var product = controller.products;
-      if(controller.loading == true){
-        return Center(child: CircularProgressIndicator(),);
-      } else if (product != null){
+          var product = controller.products;
+          if (controller.loading == true) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (product != null) {
             return SafeArea(
               child: Column(
                 children: [
@@ -84,7 +91,7 @@ class _ProductScreenState extends State<ProductScreen>
                     alignment: AlignmentDirectional.topEnd,
                   ),
                   Expanded(
-                    child:PageView(
+                    child: PageView(
                       physics: const BouncingScrollPhysics(),
                       // physics: ClampingScrollPhysics(),
                       controller: _pageController,
@@ -94,7 +101,8 @@ class _ProductScreenState extends State<ProductScreen>
                           _currentPage = currentPage;
                         });
                       },
-                      children: product.images.map((e) => Image.network(e)).toList(),
+                      children:
+                          product.images.map((e) => Image.network(e)).toList(),
                     ),
                   ),
 
@@ -145,7 +153,9 @@ class _ProductScreenState extends State<ProductScreen>
                                   });
                                 },
                                 icon: Icon(
-                                  _favorite ? Icons.favorite : Icons.favorite_border,
+                                  _favorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
                                   color: const Color(0XFFFF7750),
                                 )),
                           ],
@@ -226,13 +236,16 @@ class _ProductScreenState extends State<ProductScreen>
                           primary: Colors.transparent,
                           shadowColor: Colors.transparent,
                         ),
-                        onPressed: () {
-                          cartGetxController.create(getCart(product));
-                          // _showConfirmyBottomSheet();
+                        onPressed: () async{
+                       // var response =  await CartGetxController.to.create(getCart(product));
+                       // ignore: use_build_context_synchronously
+                       // showSnackBar(context, message: response.message,erorr: !response.success);
+                          _showConfirmyBottomSheet(product);
                         },
                         child: Text(
                           'Add To Cart',
-                          style: GoogleFonts.nunitoSans(fontWeight: FontWeight.bold),
+                          style: GoogleFonts.nunitoSans(
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -254,13 +267,11 @@ class _ProductScreenState extends State<ProductScreen>
           }
         },
       ),
-
-
-
     );
   }
 
-  void _showConfirmyBottomSheet() {
+  void _showConfirmyBottomSheet(Products products) {
+
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -417,15 +428,11 @@ class _ProductScreenState extends State<ProductScreen>
                           ),
                           AppElevatedBotton(
                               title: 'Confirm Add To Cart',
-                              onPressed: () {
-                                showSnackBar(context,
-                                    message: 'Successfully added to cart',
-                                    erorr: false);
-                                Future.delayed(
-                                    const Duration(milliseconds: 500), () {
-                                  // cartGetxController.create(getCart(product))
-                                  Navigator.pop(context);
-                                });
+                              onPressed: () async{
+                                var response =  await CartGetxController.to.create(getCart(products));
+                                showSnackBar(context, message: response.message,erorr: !response.success);
+                                // cartGetxController.create(getCart(product))
+                                Navigator.pop(context);
                               }),
                         ],
                       ),
@@ -436,6 +443,15 @@ class _ProductScreenState extends State<ProductScreen>
         });
   }
   Cart getCart(Products product) {
-    return Cart.fromProductJson(product.toMap());
+    Cart cart = Cart();
+    cart.img = product.imageUrl;
+    cart.quantity = int.parse(product.quantity);
+    cart.price = double.parse(product.price);
+    cart.name = product.nameEn;
+    cart.productId = product.id.toString();
+    cart.info = product.infoEn;
+
+    return cart;
   }
+
 }

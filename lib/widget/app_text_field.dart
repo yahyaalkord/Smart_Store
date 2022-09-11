@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTextField extends StatelessWidget {
-  const AppTextField({
+   AppTextField({
     required this.hint,
     required this.prefixIcon,
     required this.keyboardType,
@@ -11,6 +12,7 @@ class AppTextField extends StatelessWidget {
     this.suffixIcon,
     this.focudedBorderColor = Colors.grey,
     this.opsecure = false,
+    this.format,
     Key? key,
   }) : super(key: key);
   final String hint;
@@ -20,6 +22,7 @@ class AppTextField extends StatelessWidget {
   final Color focudedBorderColor;
   final bool opsecure;
   final Widget? suffixIcon;
+  List<TextInputFormatter>? format = [];
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +30,7 @@ class AppTextField extends StatelessWidget {
       obscureText: opsecure,
       controller: controller,
       keyboardType: keyboardType,
+      inputFormatters: format,
       style: GoogleFonts.nunitoSans(),
       // maxLines: 1,
       decoration: InputDecoration(

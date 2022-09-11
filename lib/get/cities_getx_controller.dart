@@ -8,8 +8,8 @@ class CitiesGetxController extends GetxController{
 
   static CitiesGetxController get to => Get.find();
   final CitiesApiController _citiesApiController = CitiesApiController();
-  RxList<Cities> citiesItems = <Cities>[].obs;
-  RxBool loading = false.obs;
+  List<Cities> citiesItems = <Cities>[];
+  bool loading = false;
 
   @override
   void onInit() {
@@ -18,8 +18,9 @@ class CitiesGetxController extends GetxController{
   }
 
   void read() async {
-    loading.value = true;
-    citiesItems.value = await _citiesApiController.cities();
-    loading.value = false;
+    loading = true;
+    citiesItems = await _citiesApiController.cities();
+    loading = false;
+    update();
   }
 }

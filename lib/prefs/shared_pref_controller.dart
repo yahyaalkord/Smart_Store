@@ -3,6 +3,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_store/models/cities.dart';
 
+import '../models/address.dart';
 import '../models/user.dart';
 
 enum PrefKeys { language, id, name, mobile, loggedIn, gender, active, verified, cityId, storeId, token, nameEn, nameAr, citiesId }
@@ -34,6 +35,7 @@ class SharedPrefController {
     _sharedPreferences.setString(PrefKeys.storeId.name, user.storeId);
     _sharedPreferences.setString(PrefKeys.token.name, 'Bearer ${user.token}');
   }
+
 
   void citiesSave({required Cities cities}) {
     _sharedPreferences.setInt(PrefKeys.cityId.name, cities.id);

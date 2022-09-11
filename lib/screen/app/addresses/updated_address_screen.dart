@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:smart_store/get/address_getx_controller.dart';
+import 'package:smart_store/get/cities_getx_controller.dart';
 import 'package:smart_store/model/country.dart';
 import 'package:smart_store/widget/app_text_field.dart';
 
+import '../../../models/address.dart';
 import '../../../utils/helpers.dart';
 
 class UpdatedAddressScreen extends StatefulWidget {
-  const UpdatedAddressScreen({Key? key}) : super(key: key);
+  /*const*/ UpdatedAddressScreen({Key? key,required this.address,required this.index}) : super(key: key);
+  Address address;
+  int index;
 
   @override
   State<UpdatedAddressScreen> createState() => _UpdatedAddressScreenState();
@@ -19,26 +24,25 @@ class _UpdatedAddressScreenState extends State<UpdatedAddressScreen> with Helper
   late TextEditingController _infoTextController;
   int? _selectedCountryId;
 
-  final List<Country> _country = <Country>[
+ /* final List<Country> _country = <Country>[
     const Country(id: 1, title: 'North'),
     const Country(id: 2, title: 'Gaza'),
     const Country(id: 3, title: 'Central Region'),
     const Country(id: 4, title: 'Khan Younes'),
     const Country(id: 4, title: 'Rafah'),
-  ];
+  ];*/
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _nameTextController = TextEditingController();
-    _mobileTextController = TextEditingController();
-    _infoTextController = TextEditingController();
+    _nameTextController = TextEditingController()..text =  widget.address.name;
+    _mobileTextController = TextEditingController()..text =  widget.address.contactNumber;
+    _infoTextController = TextEditingController()..text =  widget.address.info;
+    _selectedCountryId = widget.address.cityId;
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _nameTextController.dispose();
     _mobileTextController.dispose();
     _infoTextController.dispose();
@@ -53,8 +57,8 @@ class _UpdatedAddressScreenState extends State<UpdatedAddressScreen> with Helper
         title: Text('UpdatedAddress'),
         actions: [
           IconButton(onPressed: (){
-            showSnackBar(context, message: 'Deleted Successfully',erorr: false);
-            Navigator.pushReplacementNamed(context, '/address_screen');
+            deleted();
+            // Navigator.pushReplacementNamed(context, '/address_screen');
           }, icon: Icon(Icons.delete,color: Colors.red,),)
         ],
       ),
@@ -86,16 +90,16 @@ class _UpdatedAddressScreenState extends State<UpdatedAddressScreen> with Helper
                     'Info (brief description for the street and building name for example)',
                 prefixIcon: Icons.info,
                 keyboardType: TextInputType.text,
-                controller: _mobileTextController),
+                controller: _infoTextController),
             SizedBox(height: 15.h,),
             AppTextField(
                 hint: 'Contact number',
                 prefixIcon: Icons.phone,
                 keyboardType: TextInputType.numberWithOptions(
                     decimal: false, signed: false),
-                controller: _infoTextController),
+                controller: _mobileTextController),
             SizedBox(height: 25.h,),
-            DropdownButton<int>(
+            DropdownButton(
               hint: const Text('Select your Country'),
               style: GoogleFonts.montserrat(color: Colors.black),
               onTap: () {
@@ -117,10 +121,10 @@ class _UpdatedAddressScreenState extends State<UpdatedAddressScreen> with Helper
                   _selectedCountryId = value;
                 });
               },
-              items: _country.map((country) {
-                return DropdownMenuItem<int>(
+              items: CitiesGetxController.to.citiesItems.map((country) {
+                return DropdownMenuItem(
                   value: country.id,
-                  child: Text(country.title),
+                  child: Text(country.nameEn),
                 );
               },
               ).toList(),
@@ -139,12 +143,21 @@ class _UpdatedAddressScreenState extends State<UpdatedAddressScreen> with Helper
       ),
     );
   }
-  
 
 
-  void _performOk() {
+  void _performOk() async{
     if (_checkData()) {
-      _ok();
+      var address = Address(
+        name: _nameTextController.text,
+        info: _infoTextController.text,
+        contactNumber: _mobileTextController.text,
+        cityId: _selectedCountryId!,);
+      address.id = widget.address.id;
+      var response = await AddressGetController.to.updateAddress(address);
+      if(response.status){
+        _ok();
+      }
+      showSnackBar(context, message: response.message,erorr: !response.status);
     }
   }
 
@@ -153,6 +166,7 @@ class _UpdatedAddressScreenState extends State<UpdatedAddressScreen> with Helper
         _infoTextController.text.isNotEmpty &&
         _mobileTextController.text.isNotEmpty&&
         _selectedCountryId != null
+
         ) {
       return true;
     }
@@ -198,5 +212,16 @@ class _UpdatedAddressScreenState extends State<UpdatedAddressScreen> with Helper
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, '/address_screen');
     });
+  }
+  void deleted() async {
+    var response = await AddressGetController.to.deleteAddress(widget.index);
+    if(response.status){
+      // ignore: use_build_context_synchronously
+      showSnackBar(context, message: response.message);
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+    }
+    // ignore: use_build_context_synchronously
+    showSnackBar(context, message: response.message,erorr: !response.status);
   }
 }

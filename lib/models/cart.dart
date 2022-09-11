@@ -6,6 +6,8 @@ class Cart{
   late double price;
   late int quantity;
 
+  Cart();
+
   Map<String,dynamic> toJson(){
     Map<String,dynamic> map = {};
     map["product_id"] = productId;

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_store/api/auth_api_controller.dart';
 import 'package:smart_store/model/bn_screen.dart';
 import 'package:smart_store/models/api_response.dart';
+import 'package:smart_store/prefs/shared_pref_controller.dart';
 import 'package:smart_store/screen/app/bn_screens/cart_screens/cart_screen.dart';
 import 'package:smart_store/screen/app/bn_screens/favorite_screen.dart';
 import 'package:smart_store/screen/app/bn_screens/home_screen.dart';
@@ -50,11 +51,11 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
                 radius: 40,
               ),
               accountName: Text(
-                'Yahya Alkord',
+                SharedPrefController().getValueFor(PrefKeys.name.name),
                 style: GoogleFonts.nunitoSans(fontWeight: FontWeight.bold),
               ),
               accountEmail: Text(
-                'yahyaalkurd98@gmail.com',
+                SharedPrefController().getValueFor(PrefKeys.mobile.name).toString(),
                 style: GoogleFonts.nunitoSans(),
               ),
 

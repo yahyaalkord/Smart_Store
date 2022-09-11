@@ -4,11 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:smart_store/get/address_getx_controller.dart';
+import 'package:smart_store/models/address.dart';
+import 'package:smart_store/models/api_response.dart';
+import 'package:smart_store/utils/extenssion.dart';
 import 'package:smart_store/utils/helpers.dart';
 import 'package:smart_store/widget/app_elevated_botton.dart';
 import 'package:smart_store/widget/app_text_field.dart';
 
+import '../../../../api/order_api_controller.dart';
 import '../../../../get/cart_getx_cntroller.dart';
+import '../../../../models/create_order.dart';
 
 class CartScreen extends StatefulWidget {
   /*const*/ CartScreen({Key? key}) : super(key: key);
@@ -18,18 +24,18 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> with Helpers {
-  CartGetxController controller =
-      Get.put<CartGetxController>(CartGetxController());
-
   late TextEditingController _textEditingController;
   int _cuonter = 0;
   String _box = 'address 1';
   String _payment = 'online';
+  int? _selectedCountryId;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    Get.put<CartGetxController>(CartGetxController());
+    Get.put<AddressGetController>(AddressGetController());
     _textEditingController = TextEditingController();
   }
 
@@ -64,7 +70,7 @@ class _CartScreenState extends State<CartScreen> with Helpers {
                               ]),
                           child: IconButton(
                               onPressed: () {
-                                cart.clear();
+                                CartGetxController.to.clear();
                               },
                               icon: const Icon(
                                 Icons.delete,
@@ -80,7 +86,7 @@ class _CartScreenState extends State<CartScreen> with Helpers {
                     ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: 3,
+                      itemCount: cart.length,
                       itemBuilder: (context, index) {
                         return Container(
                           height: 90,
@@ -156,8 +162,8 @@ class _CartScreenState extends State<CartScreen> with Helpers {
                                     children: [
                                       IconButton(
                                         onPressed: () {
-                                          controller.changeQuantity(
-                                              index, cart[index].quantity += 1);
+                                          controller.changeQuantity(index,
+                                              cart[index].quantity += 1, "add");
                                         },
                                         iconSize: 20,
                                         icon: const Icon(
@@ -170,7 +176,9 @@ class _CartScreenState extends State<CartScreen> with Helpers {
                                             top: 10.h),
                                         onPressed: () {
                                           controller.changeQuantity(
-                                              index, cart[index].quantity += 1);
+                                              index,
+                                              cart[index].quantity -= 1,
+                                              "minus");
                                         },
                                         iconSize: 20,
                                         icon: const Icon(Icons.remove),
@@ -250,7 +258,7 @@ class _CartScreenState extends State<CartScreen> with Helpers {
           } else {
             return Center(
               child: Text(
-                'NO DATA',
+                'Sorry, your cart is Empty',
                 style: GoogleFonts.nunitoSans(fontSize: 20.sp),
               ),
             );
@@ -259,7 +267,7 @@ class _CartScreenState extends State<CartScreen> with Helpers {
   }
 
   void _showConfirmyBottomSheet() {
-    showModalBottomSheet(
+    showModalBottomSheet<ApiResponseT>(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(20.r),
@@ -273,58 +281,56 @@ class _CartScreenState extends State<CartScreen> with Helpers {
           }, builder: (context) {
             return StatefulBuilder(
               builder: (context, setState) {
-                return Column(
-                  // mainAxisSize: MainAxisSize.min,
+                return ListView(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w,vertical: 20.h),
+                  shrinkWrap: true,
                   children: [
-                    SizedBox(
-                      height: 15.h,
+                    Text(
+                      'Enter your contact information',
+                      style:
+                          GoogleFonts.nunitoSans(fontWeight: FontWeight.bold,fontSize: 16.sp),
                     ),
-                    Row(
-                      children: [
-                        const Icon(Icons.location_pin,
-                            size: 30, color: Color(0XFFFF7750)),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        Text(
-                          'Enter Your Addresses',
-                          style: GoogleFonts.nunitoSans(
-                              fontSize: 16.sp, fontWeight: FontWeight.bold),
-                        ),
-                        const Spacer(),
-                        PopupMenuButton<String>(onSelected: (String value) {
-                          if (_box != value) {
-                            setState(() {
-                              _box = value;
-                              _cuonter = 0;
-                            });
-                          }
-                        }, itemBuilder: (context) {
-                          return [
-                            PopupMenuItem(
-                              value: 'a1',
-                              height: 20,
-                              child: Text(
-                                'Address 1',
-                                style: GoogleFonts.nunitoSans(),
-                              ),
+                    SizedBox(height: 15.h,),
+                    Text(
+                      'Choose Your Address',
+                      style: GoogleFonts.nunitoSans(),
+                    ),
+                    SizedBox(height: 20.h,),
+                    GetBuilder<AddressGetController>(
+                      builder: (controller) {
+                        var list = controller.list;
+                        return Padding(
+                          padding:  EdgeInsets.symmetric(horizontal: 20.w),
+                          child: DropdownButton(
+                            hint: const Text('Select your Country'),
+                            style: GoogleFonts.montserrat(color: Colors.black),
+                            onTap: () {},
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            // itemHeight: 65,
+                            dropdownColor: Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(10),
+                            elevation: 5,
+                            underline: const Divider(
+                              color: Colors.black,
+                              thickness: 1,
+                              height: 0,
                             ),
-                            const PopupMenuDivider(),
-                            PopupMenuItem(
-                              value: 'a2',
-                              height: 20,
-                              child: Text(
-                                'Address 2',
-                                style: GoogleFonts.nunitoSans(),
-                              ),
-                            ),
-                          ];
-                        }),
-                      ],
+                            isExpanded: true,
+                            value: _selectedCountryId,
+                            onChanged: (int? value) {
+                              setState(() {
+                                _selectedCountryId = value;
+                              });
+                            },
+                            items: list
+                                .map((e) => DropdownMenuItem(
+                                    value: e.id, child: Text(e.name)))
+                                .toList(),
+                          ),
+                        );
+                      },
                     ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
+                    SizedBox(height: 20.h,),
                     Row(
                       children: [
                         Expanded(
@@ -347,38 +353,114 @@ class _CartScreenState extends State<CartScreen> with Helpers {
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 20.h,
+                    SizedBox(height: 20.h,),
+                    AppTextField(
+                      hint: 'Enter Card Number',
+                      prefixIcon: Icons.add_card,
+                      keyboardType: TextInputType.text,
+                      controller: _textEditingController,
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: AppTextField(
-                        hint: 'Enter Card Number',
-                        prefixIcon: Icons.add_card,
-                        keyboardType: TextInputType.text,
-                        controller: _textEditingController,
-                      ),
-                    ),
-                    const Spacer(),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 25.w),
-                      child: AppElevatedBotton(
-                          title: 'Buy Now !', onPressed: () => _performBuy()),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
+                    SizedBox(height: 30.h,),
+                    AppElevatedBotton(title: 'Buy Now !', onPressed: (){
+                      _performBuy(context);
+                    }),
                   ],
                 );
+                // return Padding(
+                //   padding:
+                //   EdgeInsets.symmetric(horizontal: 25.w, vertical: 25.h),
+                //   child: GetBuilder<AddressGetController>(
+                //     builder: (controller) {
+                //       var list = controller.list;
+                //       return Column(
+                //         children: [
+                //           Text(
+                //             'Your Adresses',
+                //             style: GoogleFonts.nunitoSans(
+                //                 fontWeight: FontWeight.bold),
+                //           ),
+                //           ListView.builder(
+                //             shrinkWrap: true,
+                //             itemCount: list.length,
+                //             itemBuilder: (context, index) {
+                //               address = list[index];
+                //               gIndex = index;
+                //               print("size ${list.length}");
+                //               return Column(
+                //                 mainAxisSize: MainAxisSize.min,
+                //                 children: [
+                //                   Stack(
+                //                     children: [
+                //                       Row(
+                //                         children: [
+                //                           const Icon(Icons.location_pin,
+                //                               size: 30,
+                //                               color: const Color(0XFFFF7750)),
+                //                           SizedBox(
+                //                             width: 10.w,
+                //                           ),
+                //                           Text(
+                //                             list[index].info,
+                //                             style: GoogleFonts.nunitoSans(
+                //                               fontSize: 16.sp,
+                //                             ),
+                //                           ),
+                //                         ],
+                //                       ),
+                //                       Align(
+                //                         alignment:
+                //                         AlignmentDirectional.centerEnd,
+                //                         child: Container(
+                //                           decoration: BoxDecoration(
+                //                               borderRadius:
+                //                               BorderRadius.circular(40.r),
+                //                               boxShadow: [
+                //                                 BoxShadow(
+                //                                     color:
+                //                                     Colors.orange.shade100)
+                //                               ]),
+                //                           child: IconButton(
+                //                             onPressed: () {
+                //                               Navigator.pop(context);
+                //                             },
+                //                             icon: const Icon(Icons.update),
+                //                           ),
+                //                         ),
+                //                       ),
+                //                     ],
+                //                   ),
+                //                   SizedBox(
+                //                     height: 10.h,
+                //                   ),
+                //                   const Divider(),
+                //                 ],
+                //               );
+                //             },
+                //           ),
+                //         ],
+                //       );
+                //     },
+                //   ),
+                // );
               },
             );
           });
-        });
+        }).then((value) {
+          if(value != null){
+            if(value.status){
+              showSnackBar(context, message: value.message,erorr: !value.status);
+            }
+          }
+    });
   }
 
-  void _performBuy() {
+  void _performBuy(BuildContext context) async {
     if (_checkData()) {
-      _buy();
+     var res = await _createOrder();
+     if(res.status){
+       // ignore: use_build_context_synchronously
+       _done(context,res);
+     }
     }
   }
 
@@ -392,8 +474,19 @@ class _CartScreenState extends State<CartScreen> with Helpers {
     return false;
   }
 
-  void _buy() {
-    Navigator.pop(context);
-    showSnackBar(context, message: 'Buy Successfully', erorr: false);
+  void _done(BuildContext context,ApiResponseT responseT) {
+    Navigator.pop(context,responseT);
+    // showSnackBar(context, message: 'Buy Successfully', erorr: false);
+  }
+
+  Future<ApiResponseT> _createOrder() async {
+    return OrderApiController().createOrder(
+      order: CreateOrder(
+        paymentType: "Cash",
+        addressId: AddressGetController.to.defaultAddress!.id.toString(),
+        cart: CartGetxController.to.cartItems.map((e) => CartObj.fromJson(e.toJson())).toList(),
+      ),
+    );
   }
 }
+

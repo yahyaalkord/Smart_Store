@@ -25,14 +25,6 @@ class CartDbController extends DbOperations<Cart> {
 
   @override
   Future<List<Cart>> read() async {
-    //SELECT cart.id, cart.product_id, cart.count, cart.total, cart.price, product.name as product_name
-    // FROM cart JOIN products ON cart.product_id = products.id
-    //WHERE cart.user_id = ?
-    // List<Map<String, dynamic>> rowsMap = await database.query(
-    //   Cart.tableName,
-    //   where: 'user_id = ?',
-    //   whereArgs: [userId],
-    // );
     List<Map<String, dynamic>> rowsMap = await database.query(
       Cart.tableName,
     );
@@ -64,8 +56,9 @@ class CartDbController extends DbOperations<Cart> {
   }
 
   Future<int> getQuantity() async {
-    int? count = Sqflite.firstIntValue(await database.rawQuery('SELECT COUNT(*) FROM ${Cart.tableName}'));
-    return count??0;
+    var result = await database.rawQuery("SELECT SUM(quantity) FROM ${Cart.tableName}");
+    var value = result[0]["SUM(quantity)"];
+    return int.parse(value.toString());
   }
 
   @override

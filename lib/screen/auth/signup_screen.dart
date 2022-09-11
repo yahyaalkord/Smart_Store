@@ -35,18 +35,19 @@ class _SignUpScreenState extends State<SignUpScreen> with Helpers{
   int? _selectedCountryId;
   String _gender = 'M';
 
-  final List<Country> _country = <Country>[
+  /*final List<Country> _country = <Country>[
     const Country(id: 1, title: 'North'),
     const Country(id: 2, title: 'Gaza'),
     const Country(id: 3, title: 'Central Region'),
     const Country(id: 4, title: 'Khan Younes'),
     const Country(id: 5, title: 'Rafah'),
-  ];
+  ];*/
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    Get.put<CitiesGetxController>(CitiesGetxController());
     _nameTextController = TextEditingController();
     _mobileTextController = TextEditingController();
     _passwordTextController = TextEditingController();
@@ -69,8 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> with Helpers{
       appBar: AppBar(
         title: Text('Sing Up'),
       ),
-      body: GetX<CitiesGetxController>(
-        init: CitiesGetxController(),
+      body: GetBuilder<CitiesGetxController>(
         builder: (controller){
           List<Cities> city= controller.citiesItems;
           return Padding(

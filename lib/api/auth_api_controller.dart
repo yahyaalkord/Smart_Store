@@ -71,6 +71,37 @@ class AuthApiController with ApiHelper{
     return errorRespnse;
   }
 
+  Future<ApiResponseT> updateProfile(
+      {required User user}) async {
+    String token = SharedPrefController().getValueFor<String>(PrefKeys.token.name)!;
+    Uri uri = Uri.parse(ApiSettings.updateProfile);
+    var response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.authorizationHeader: token,
+      },
+      body:{
+        'name': user.name,
+        'mobile': user.mobile,
+        'city_id': user.cityId,
+        'gender': user.gender,
+      },
+
+    );
+    print(response.statusCode);
+    if (response.statusCode == 200 || response.statusCode == 400) {
+  /*    if(response.statusCode == 200){
+             User user = User.fromJson(json['data']);
+        //TODO: save user in shared Preferences
+        SharedPrefController().save(user: user);
+      }*/
+      var json = jsonDecode(response.body);
+      // SharedPrefController().save(user: user);
+      return ApiResponseT(message: json["message"], status: json["status"]);
+    }
+    return ApiResponseT<int>(message: "Something going wrong!", status: false);
+  }
+
   Future<ApiResponse> logout() async{
     String token = SharedPrefController().getValueFor<String>(PrefKeys.token.name)!;
     Uri uri = Uri.parse(ApiSettings.logout);

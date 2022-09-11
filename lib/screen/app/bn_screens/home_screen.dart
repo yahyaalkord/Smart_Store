@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    Get.put<HomeGetController>(HomeGetController());
     _searchTextController = TextEditingController();
     _pageController = PageController(viewportFraction: 0.8, initialPage: 0);
     _pageController1 = PageController(viewportFraction: 0.8, initialPage: 0);
@@ -47,7 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeGetController>(
-        init: HomeGetController(),
         builder: (controller) {
           var home = controller.home;
           if(controller.loading == true){
